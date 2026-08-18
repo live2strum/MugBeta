@@ -1853,6 +1853,15 @@ body>header,.builder-banner-header{display:none!important;height:0!important;min
 .art-library-section-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:8px;min-height:1px}
 .controls .number-color-btn,.controls .effect-segments button,.controls .selected-chord-action-row button{border-color:#8fc9df!important;background:#fff!important;color:#075b80!important;box-shadow:none!important}
 .controls .number-color-btn.active,.controls .effect-segments button.active{border-color:#078fc8!important;background:#078fc8!important;color:#fff!important}
+.controls .mode-selector-section .mode-buttons button{display:flex!important;align-items:center!important;justify-content:center!important;gap:7px!important;font-size:13px!important;line-height:1!important}
+.controls .mode-selector-section .mug-icon{width:22px!important;height:22px!important;margin:0!important}
+.controls .appearance-fan-launch{border:1px solid #8fc9df!important;background:#fff!important;color:#075b80!important;box-shadow:none!important}
+.controls .appearance-fan-wrap.open .appearance-fan-launch{border-color:#078fc8!important;background:#078fc8!important;color:#fff!important}
+.appearance-fan-panel{border-color:#65bddd!important;background:#fff!important;color:#17384d!important}
+.appearance-fan-panel select,.appearance-fan-panel input:not([type="range"]):not([type="checkbox"]){border-color:#adc4d1!important;background:#fff!important;color:#183042!important}
+.controls .appearance-fan-panel .builder-color-choice{background:var(--choice)!important;background-image:none!important;opacity:1!important}
+.chord-root-menu button{font-size:14px!important;font-weight:900!important;text-align:center!important}
+.chord-finder-fan.chord-choice-portal button{font-size:12px!important}
 @media(max-width:760px){.chord-finder-wrap.open>.chord-finder-fan{left:10px!important;right:10px!important;top:auto!important;bottom:10px!important;width:auto!important;grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 </head>
@@ -1875,7 +1884,12 @@ body>header,.builder-banner-header{display:none!important;height:0!important;min
   </svg>
   Basic MUG
 </button>
-<button class="mode-btn" data-mode="advanced">Custom MUG</button>
+<button class="mode-btn" data-mode="advanced">
+  <svg class="mug-icon" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M4 5h12v11a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V5zm12 3h2.2A2.8 2.8 0 0 1 21 10.8v1.4a2.8 2.8 0 0 1-2.8 2.8H16V8z"/>
+  </svg>
+  Custom MUG
+</button>
 </div></section>
 
 <section class="control-section layout-section">
@@ -4562,7 +4576,7 @@ function initBuilderColorMenus(){
     const chip=button.querySelector(".builder-color-chip");wrap.appendChild(button);
     const menu=document.createElement("div");menu.className="builder-color-popover";menu.setAttribute("role","menu");menu.setAttribute("aria-label",label);menu.onclick=event=>event.stopPropagation();
     BUILDER_COLOR_PRESETS.forEach(([name,color])=>{
-      const choice=document.createElement("button");choice.type="button";choice.className="builder-color-choice";choice.style.setProperty("--choice",color);choice.title=name;choice.setAttribute("aria-label",`${name} ${color}`);
+      const choice=document.createElement("button");choice.type="button";choice.className="builder-color-choice";choice.style.setProperty("--choice",color);choice.style.setProperty("background",color,"important");choice.title=name;choice.setAttribute("aria-label",`${name} ${color}`);
       choice.onclick=event=>{event.preventDefault();event.stopPropagation();applyBuilderMenuColor(input,color);wrap.classList.remove("open");button.setAttribute("aria-expanded","false")};menu.appendChild(choice);
     });
     const choose=document.createElement("button");choose.type="button";choose.className="builder-eyedropper";choose.textContent="Choose Color — full spectrum / RGB";choose.onclick=event=>{event.preventDefault();event.stopPropagation();input.click()};menu.appendChild(choose);
