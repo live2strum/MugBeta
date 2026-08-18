@@ -209,12 +209,14 @@ const artwork=artworkPaths.map((path,index)=>{
   const parts=path.split('/'),primaryGroup=parts[0],category=parts[1]||'Other',filename=parts[parts.length-1];
   const name=filename.replace(/\.[^.]+$/,'');
   const recolorable=primaryGroup==='BW';
+  const displayCategory=/notes?/i.test(name)?'Notes':/(?:star|bolt|lightning)/i.test(name)?'Stars & Bolts':primaryGroup==='Color'&&/guitar/i.test(name)?'Vintage Guitars':({PeoplePerformers:'People & Performers','People&Performers':'People & Performers',BadgesButtons:'Badges & Buttons',StarsBolts:'Stars & Bolts'}[category]||category);
   return Object.freeze({
     id:slugify(primaryGroup+'-'+category+'-'+name)+'-'+String(index+1).padStart(3,'0'),
     name,
     source:'assets/'+path,
     primaryGroup,
     category,
+    displayCategory,
     subcategory:category,
     recolorable,
     colorBehavior:recolorable?'recolorable':'original-color',

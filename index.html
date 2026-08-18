@@ -1845,6 +1845,11 @@ body>header,.builder-banner-header{display:none!important;height:0!important;min
 .chord-root-menu button.active,.chord-finder-fan.chord-choice-portal button.active,.chord-finder-fan.chord-choice-portal button[aria-selected="true"]{border-color:#0879a5!important;background:#0879a5!important;color:#fff!important}
 .chord-finder-launch{display:flex!important;align-items:center!important;justify-content:space-between!important;width:100%!important;height:34px!important;min-height:34px!important;padding:5px 28px 5px 9px!important;border:1px solid #adc4d1!important;border-radius:7px!important;background:#fff!important;color:#183042!important;font-size:12px!important;text-align:left!important;box-shadow:none!important}
 .chord-finder-launch:after{content:"";position:absolute;right:11px;width:7px;height:7px;border-right:2px solid #365568;border-bottom:2px solid #365568;transform:rotate(45deg) translateY(-2px)}
+.art-library-section{grid-column:1/-1;display:grid;grid-template-columns:subgrid;gap:8px;margin:0 0 12px}
+.art-library-section-title{grid-column:1/-1;margin:8px 0 0;padding:7px 9px;border-bottom:2px solid #08bdf5;color:#17384d;font-size:13px;font-weight:900;letter-spacing:.025em}
+.art-library-section-grid{grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:8px}
+.controls .number-color-btn,.controls .effect-segments button,.controls .selected-chord-action-row button{border-color:#8fc9df!important;background:#fff!important;color:#075b80!important;box-shadow:none!important}
+.controls .number-color-btn.active,.controls .effect-segments button.active{border-color:#078fc8!important;background:#078fc8!important;color:#fff!important}
 @media(max-width:760px){.chord-finder-wrap.open>.chord-finder-fan{left:10px!important;right:10px!important;top:auto!important;bottom:10px!important;width:auto!important;grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 </head>
@@ -2250,6 +2255,7 @@ body>header,.builder-banner-header{display:none!important;height:0!important;min
 </section>
 
 <section class="control-section custom-advanced-controls diagram-controls"><h2>Diagram markers</h2>
+<label>Dot labels<select id="dotLabelMode"><option value="none">No dot labels</option><option value="fingers" selected>Finger numbers</option><option value="notes">Note names</option></select></label>
 <label class="check"><input id="showOpenMarkers" type="checkbox" checked> Show O open-string markers</label>
 <label class="check"><input id="showMuteMarkers" type="checkbox" checked> Show X don’t-play markers</label>
 <label class="check"><input id="showStringMarkers" type="checkbox" checked> Show string-name markers</label>
@@ -2569,11 +2575,13 @@ async function artworkLooksLikeOutline(art){
 function applyArtworkLibraryFilters(){
   const grid=q('artLibraryGrid');if(!grid)return;const query=String(q('artLibrarySearch')?.value||'').trim().toLowerCase();const category=q('artLibraryCategory')?.value||'';const type=q('artLibraryType')?.value||'';let visible=0;
   grid.querySelectorAll('.art-tile').forEach(tile=>{const show=(!query||tile.dataset.searchText.includes(query))&&(!category||tile.dataset.artCategory===category)&&(!type||tile.dataset.artType===type);tile.hidden=!show;if(show)visible++});
+  grid.querySelectorAll('.art-library-section').forEach(section=>section.hidden=![...section.querySelectorAll('.art-tile')].some(tile=>!tile.hidden));
   q('artLibraryResultCount').textContent=visible+' artwork item'+(visible===1?'':'s');
 }
 function renderArtworkLibrary(){
-  const grid=q('artLibraryGrid');if(!grid)return;const entries=Object.values(EXTERNAL_ARTWORK_LIBRARY);const categories=[...new Set(entries.map(a=>a.primaryGroup+' / '+a.category))];
-  grid.innerHTML=entries.map(art=>'<button class="art-tile approved-art-tile" type="button" data-recovered-art-key="'+art.id+'" data-art-category="'+art.primaryGroup+' / '+art.category+'" data-primary-group="'+art.primaryGroup+'" data-art-type="'+(art.recolorable?'recolorable':'full-color')+'" data-search-text="'+(art.id+' '+art.name+' '+art.primaryGroup+' '+art.category).toLowerCase()+'" title="Add '+art.name+'"><img src="'+art.source+'" alt="" loading="lazy"><span class="art-tile-label"><strong>'+art.name+'</strong><small>'+art.primaryGroup+' · '+art.category+(art.recolorable?' · Color Editable':'')+'</small></span></button>').join('');
+  const grid=q('artLibraryGrid');if(!grid)return;const entries=Object.values(EXTERNAL_ARTWORK_LIBRARY),order={BW:['Picks','Notes','Stars & Bolts','People & Performers'],Color:['Picks','Notes','Stars & Bolts','Badges & Buttons','Skulls','Vintage Guitars','Watercolors']};const categories=[...new Set(entries.map(a=>a.primaryGroup+' / '+(a.displayCategory||a.category)))];
+  const tile=art=>'<button class="art-tile approved-art-tile" type="button" data-recovered-art-key="'+art.id+'" data-art-category="'+art.primaryGroup+' / '+(art.displayCategory||art.category)+'" data-primary-group="'+art.primaryGroup+'" data-art-type="'+(art.recolorable?'recolorable':'full-color')+'" data-search-text="'+(art.id+' '+art.name+' '+art.primaryGroup+' '+(art.displayCategory||art.category)).toLowerCase()+'" title="Add '+art.name+'"><img src="'+art.source+'" alt="" loading="lazy"><span class="art-tile-label"><strong>'+art.name+'</strong><small>'+art.primaryGroup+' · '+(art.displayCategory||art.category)+(art.recolorable?' · Color Editable':'')+'</small></span></button>';
+  grid.innerHTML=Object.entries(order).map(([group,sections])=>sections.map(section=>{const matches=entries.filter(art=>art.primaryGroup===group&&(art.displayCategory||art.category)===section);return matches.length?'<section class="art-library-section" data-primary-group="'+group+'"><h3 class="art-library-section-title">'+group+' — '+section+'</h3><div class="art-library-section-grid">'+matches.map(tile).join('')+'</div></section>':''}).join('')).join('');
   const select=q('artLibraryCategory');select.innerHTML='<option value="">All categories</option>'+categories.map(c=>'<option value="'+c+'">'+c+'</option>').join('');
   grid.querySelectorAll('[data-recovered-art-key]').forEach(btn=>btn.onclick=()=>{grid.querySelectorAll('.art-tile').forEach(t=>t.setAttribute('aria-selected',t===btn?'true':'false'));addRecoveredArtwork(btn.dataset.recoveredArtKey)});
   q('artLibrarySearch').oninput=applyArtworkLibraryFilters;q('artLibraryType').onchange=applyArtworkLibraryFilters;applyArtworkLibraryFilters();
@@ -2734,8 +2742,31 @@ function applyMarkerVisibility(){
   svg.querySelectorAll(".open-marker").forEach(el=>el.style.display=showOpen?"":"none");
   svg.querySelectorAll(".mute-marker").forEach(el=>el.style.display=showMute?"":"none");
   svg.querySelectorAll(".marker-text").forEach(el=>el.style.display=showStrings?"":"none");
+  applyDotLabelMode();
   applyDiagramStyle(svg);
 }
+
+const GUITAR_STRING_MIDI=[40,45,50,55,59,64];
+function noteNameForMidi(midi,chordName=""){
+  const sharps=["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"],flats=["C","D♭","D","E♭","E","F","G♭","G","A♭","A","B♭","B"];
+  return (String(chordName).includes("b")?flats:sharps)[((midi%12)+12)%12];
+}
+function applyDotLabelMode(root=svg){
+  if(!root)return;const labelMode=q("dotLabelMode")?.value||"fingers";
+  root.querySelectorAll(".chord-slot").forEach(slot=>{
+    const chordName=slot.querySelector(".chord-name")?.textContent||"";
+    slot.querySelectorAll(".finger-number").forEach(label=>{
+      if(!label.dataset.fingerNumber)label.dataset.fingerNumber=label.textContent.trim();
+      label.style.display=labelMode==="none"?"none":"";
+      if(labelMode!=="notes"){label.textContent=label.dataset.fingerNumber;return}
+      const x=Number(label.getAttribute("x")),y=Number(label.getAttribute("y"));
+      const dot=[...slot.querySelectorAll(".finger-dot")].reduce((best,circle)=>{const distance=Math.abs(Number(circle.getAttribute("cx"))-x)+Math.abs(Number(circle.getAttribute("cy"))-y);return !best||distance<best.distance?{circle,distance}:best},null)?.circle;
+      if(!dot)return;const stringIndex=Math.max(0,Math.min(5,Math.round((Number(dot.getAttribute("cx"))-58)/40.8))),fret=Math.max(1,Math.round((Number(dot.getAttribute("cy"))-147.5)/55)+1);
+      label.textContent=noteNameForMidi(GUITAR_STRING_MIDI[stringIndex]+fret,chordName);
+    });
+  });
+}
+q("dotLabelMode")?.addEventListener("change",()=>{applyDotLabelMode();snapshot()});
 
 function syncFooterPreset(){
   const value=q("footerInput").value;
@@ -3926,6 +3957,7 @@ q("resetMode").onclick=()=>{
   q("showOpenMarkers").checked=true;
   q("showMuteMarkers").checked=true;
   q("showStringMarkers").checked=true;
+  q("dotLabelMode").value="fingers";
   updateStringMarkerControlForLayout();
   q("moveX").value=0;
   q("moveY").value=0;
@@ -4946,6 +4978,8 @@ repairAppearanceLaunchers();
 function initSelectedChordColorPortal(){
   const input=q('individualChordColor'),wrap=input?.closest('.builder-color-menu-wrap'),popover=wrap?.querySelector('.builder-color-popover');
   if(!input||!wrap||!popover)return;
+  popover.querySelector('.builder-color-custom')?.remove();
+  return;
   const colorLabel=wrap.closest('label');colorLabel?.addEventListener('click',event=>{if(event.target.closest?.('.builder-color-button'))event.preventDefault()},true);
   const nativeChooser=[...popover.querySelectorAll('.builder-eyedropper')].find(button=>button.textContent.includes('Choose Color'));
   if(nativeChooser){const custom=document.createElement('div');custom.className='selected-color-custom';custom.innerHTML='<input type="text" maxlength="7" value="'+input.value.toUpperCase()+'" aria-label="Selected chord custom hex color"><button type="button">Apply</button>';const hex=custom.querySelector('input'),apply=custom.querySelector('button'),submit=()=>{const color=normalizeBuilderHex(hex.value);if(!color){hex.setAttribute('aria-invalid','true');return}hex.removeAttribute('aria-invalid');applyBuilderMenuColor(input,color);wrap.classList.remove('open')};apply.onclick=event=>{event.preventDefault();event.stopPropagation();submit()};hex.onkeydown=event=>{if(event.key==='Enter'){event.preventDefault();submit()}};input.addEventListener('input',()=>{hex.value=input.value.toUpperCase()});nativeChooser.replaceWith(custom)}
