@@ -1947,6 +1947,37 @@ body>.builder-banner-header{
   .panel.controls,.canvas-panel{height:auto!important;max-height:none!important}
 }
 </style>
+<style id="new-banner-crop-and-toolbar-edge-fix">
+/* Match the actual 1864 × 324 UI banner and preserve it edge to edge. */
+body>.builder-banner-header{
+  height:17.3819742489vw!important;
+  max-height:324px!important;
+}
+.builder-banner-header img{
+  position:absolute!important;
+  top:0!important;
+  left:0!important;
+  width:100%!important;
+  height:100%!important;
+  max-width:none!important;
+  margin:0!important;
+  transform:none!important;
+  object-fit:contain!important;
+  object-position:center!important;
+}
+.app{height:calc(100vh - min(17.3819742489vw,324px))!important}
+.above-canvas-controls{
+  border:0!important;
+  outline:0!important;
+}
+.panel.controls{
+  border-right:0!important;
+  outline:0!important;
+}
+@media(max-width:900px){
+  .app{height:auto!important;min-height:calc(100vh - min(17.3819742489vw,324px))!important}
+}
+</style>
 </head>
 <body class="mode-fixed">
 <header class="builder-banner-header" aria-label="Chord Mug Builder">
