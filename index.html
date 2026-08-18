@@ -1904,8 +1904,8 @@ body>header,.builder-banner-header{display:none!important;height:0!important;min
 body>.builder-banner-header{
   display:block!important;
   width:100%;
-  height:clamp(116px,13vw,190px)!important;
-  min-height:116px!important;
+  height:27.2676056338vw!important;
+  min-height:0!important;
   margin:0!important;
   padding:0!important;
   overflow:hidden;
@@ -1913,8 +1913,8 @@ body>.builder-banner-header{
   border-radius:0!important;
   background:#02070b;
 }
-.builder-banner-header img{display:block;width:100%;height:100%;object-fit:fill}
-.app{height:calc(100vh - clamp(116px,13vw,190px))!important;gap:0!important;padding:0!important}
+.builder-banner-header img{display:block;width:100%;height:100%;object-fit:contain}
+.app{height:calc(100vh - 27.2676056338vw)!important;gap:0!important;padding:0!important;border-top:0!important}
 .panel.controls,.canvas-panel{height:100%!important;max-height:100%!important;border-radius:0!important}
 .panel.controls{padding:6px 8px 10px!important}
 .canvas-panel{padding:0 14px 14px!important;border:0!important;outline:0!important;box-shadow:none!important}
@@ -1925,8 +1925,11 @@ body>.builder-banner-header{
   padding:6px 14px!important;
   box-sizing:border-box!important;
   border-radius:0!important;
+  border-color:#173d56!important;
   border-left:0!important;
   border-right:0!important;
+  background:linear-gradient(180deg,#0b1c2a 0%,#10283a 100%)!important;
+  box-shadow:none!important;
 }
 .above-canvas-controls .global-toolbar{width:100%!important;margin:0!important}
 .above-canvas-controls .global-toolbar button{border-radius:8px!important}
@@ -1936,8 +1939,7 @@ body>.builder-banner-header{
 .top-control-icon{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .above-canvas-controls .layout-launcher{display:flex!important;align-items:center!important;justify-content:center!important;gap:7px!important}
 @media(max-width:900px){
-  body>.builder-banner-header{height:clamp(96px,20vw,150px)!important;min-height:96px!important}
-  .app{height:auto!important;min-height:calc(100vh - clamp(96px,20vw,150px))!important}
+  .app{height:auto!important;min-height:calc(100vh - 27.2676056338vw)!important}
   .panel.controls,.canvas-panel{height:auto!important;max-height:none!important}
 }
 </style>
