@@ -1,0 +1,55 @@
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Editor / IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Node dependencies
+node_modules/
+
+# Build / cache folders
+dist/
+build/
+.cache/
+.tmp/
+temp/
+
+# Environment / secret files
+.env
+.env.*
+!.env.example
+
+# Local backup files
+*.bak
+*.backup
+*.old
+*.orig
+
+# Archives / temporary exports
+*.zip
+*.tar
+*.gz
+
+# Python junk, if any utilities are used
+__pycache__/
+*.pyc
+
+# Git merge conflict files
+*.BASE.*
+*.LOCAL.*
+*.REMOTE.*
