@@ -1871,7 +1871,9 @@ body>header,.builder-banner-header{display:none!important;height:0!important;min
 .number-color-btn[data-color="#000000"]{background:#111!important;color:#fff!important}
 .number-color-btn[data-color="#ffffff"]{background:#fff!important;color:#183042!important}
 .number-color-btn.active{border-color:#078fc8!important;box-shadow:0 0 0 2px rgba(8,189,245,.24)!important}
-.chord-editor-top-row .chord-finder-wrap{width:50%!important;justify-self:start!important}
+.chord-editor-top-row .chord-finder-wrap{width:100%!important;justify-self:stretch!important}
+.chord-root-menu,.chord-finder-fan.chord-choice-portal{grid-template-columns:1fr!important;padding:4px!important;border:1px solid #adc4d1!important;border-radius:7px!important;background:#fff!important;color:#183042!important;box-shadow:0 10px 24px rgba(0,26,46,.18)!important}
+.chord-root-menu button,.chord-finder-fan.chord-choice-portal button{width:100%!important;min-height:34px!important;border:1px solid transparent!important;border-radius:5px!important;background:#fff!important;color:#183042!important;text-align:left!important}
 @media(max-width:760px){.chord-finder-wrap.open>.chord-finder-fan{left:10px!important;right:10px!important;top:auto!important;bottom:10px!important;width:auto!important;grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 </head>
@@ -2241,7 +2243,7 @@ body>header,.builder-banner-header{display:none!important;height:0!important;min
 
 <section class="control-section standard-controls chord-library-controls chord-editor-controls"><h2 class="illustrated-section-heading chord-library-heading"><span class="chord-library-note" aria-hidden="true">♪</span><span>Chord Editor</span></h2>
 <span id="selectionSummary" hidden></span><span id="assignmentTargetNote" hidden></span>
-<div class="chord-editor-top-row"><label>Select Diagram<select id="librarySlot"><option value="1">Slot 1</option><option value="2">Slot 2</option><option value="3">Slot 3</option><option value="4">Slot 4</option><option value="5">Slot 5</option><option value="6">Slot 6</option><option value="7">Slot 7</option><option value="8">Slot 8</option><option value="9">Slot 9</option><option value="10">Slot 10</option><option value="11">Slot 11</option><option value="12">Slot 12</option></select></label><div class="chord-finder-wrap"><label>Chord Finder<select id="libraryRootFilter"><option value="C">C</option></select></label><div id="chordFinderFan" class="chord-finder-fan" aria-label="Chords for selected root"></div></div></div>
+<div class="chord-editor-top-row"><label>Select Diagram<select id="librarySlot"><option value="1">Diagram 1</option><option value="2">Diagram 2</option><option value="3">Diagram 3</option><option value="4">Diagram 4</option><option value="5">Diagram 5</option><option value="6">Diagram 6</option><option value="7">Diagram 7</option><option value="8">Diagram 8</option><option value="9">Diagram 9</option><option value="10">Diagram 10</option><option value="11">Diagram 11</option><option value="12">Diagram 12</option></select></label><div class="chord-finder-wrap"><label>Chord Finder<select id="libraryRootFilter"><option value="C">C</option></select></label><div id="chordFinderFan" class="chord-finder-fan" aria-label="Chords for selected root"></div></div></div>
 <label class="chord-variation-fallback">Chord variation<select id="libraryChord"></select></label>
 <button id="applyLibraryChord" type="button">Assign chord to target</button>
 <div class="advanced-controls"><label>Chord name<input id="selectedName" type="text" placeholder="Select a diagram"></label>
@@ -2946,7 +2948,7 @@ function updateLibrarySlotOptions(){
   const select=q("librarySlot");
   const count=getCurrentMeta().count;
   const currentValue=Math.min(Number(select.value||1),count)||1;
-  select.innerHTML=Array.from({length:count},(_,i)=>`<option value="${i+1}">Slot ${i+1}</option>`).join("");
+  select.innerHTML=Array.from({length:count},(_,i)=>`<option value="${i+1}">Diagram ${i+1}</option>`).join("");
   select.value=String(currentValue);
 }
 function initializeState(name){
@@ -4970,7 +4972,7 @@ function initClickChordFinder(){
   fan.classList.add('chord-choice-portal');fan.setAttribute('role','listbox');fan.setAttribute('tabindex','-1');document.body.append(roots,fan);
   const position=()=>{
     if(!roots.classList.contains('open'))return;
-    const trigger=launch.getBoundingClientRect(),gap=8,rootWidth=roots.offsetWidth||210,fanWidth=fan.offsetWidth||420,fanHeight=fan.offsetHeight||336;
+    const trigger=launch.getBoundingClientRect(),gap=8,menuWidth=Math.max(120,Math.round(trigger.width));roots.style.setProperty('width',menuWidth+'px','important');fan.style.setProperty('width',menuWidth+'px','important');const rootWidth=menuWidth,fanWidth=menuWidth,fanHeight=fan.offsetHeight||336;
     let rootLeft=trigger.right+gap;if(rootLeft+rootWidth+gap+fanWidth>innerWidth-12)rootLeft=Math.max(12,trigger.left-rootWidth-gap);
     const rootTop=Math.min(Math.max(12,trigger.top),Math.max(12,innerHeight-(roots.offsetHeight||420)-12));
     roots.style.setProperty('left',Math.round(rootLeft)+'px','important');roots.style.setProperty('top',Math.round(rootTop)+'px','important');
