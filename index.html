@@ -1899,8 +1899,53 @@ body>header,.builder-banner-header{display:none!important;height:0!important;min
 .chord-finder-launch:after{margin-left:auto}
 .chord-finder-note{flex:0 0 auto;width:15px;height:15px;pointer-events:none}
 </style>
+<style id="approved-top-builder-header">
+/* Approved top-of-builder banner and continuous square-edged control system. */
+body>.builder-banner-header{
+  display:block!important;
+  width:100%;
+  height:clamp(116px,13vw,190px)!important;
+  min-height:116px!important;
+  margin:0!important;
+  padding:0!important;
+  overflow:hidden;
+  border:0!important;
+  border-radius:0!important;
+  background:#02070b;
+}
+.builder-banner-header img{display:block;width:100%;height:100%;object-fit:fill}
+.app{height:calc(100vh - clamp(116px,13vw,190px))!important;gap:0!important;padding:0!important}
+.panel.controls,.canvas-panel{height:100%!important;max-height:100%!important;border-radius:0!important}
+.panel.controls{padding:0 8px 10px!important}
+.canvas-panel{padding:0 14px 14px!important}
+.above-canvas-controls{
+  width:calc(100% + 28px)!important;
+  max-width:none!important;
+  margin:0 -14px!important;
+  padding:6px 14px!important;
+  box-sizing:border-box!important;
+  border-radius:0!important;
+  border-left:0!important;
+  border-right:0!important;
+}
+.above-canvas-controls .global-toolbar{width:100%!important;margin:0!important}
+.above-canvas-controls .global-toolbar button{border-radius:8px!important}
+.above-canvas-controls .layout-launcher,
+.controls .mode-selector-section .mode-btn{font-size:13px!important;line-height:1!important}
+.top-control-icon,.controls .mode-selector-section .mug-icon{flex:0 0 22px!important;width:22px!important;height:22px!important}
+.top-control-icon{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.above-canvas-controls .layout-launcher{display:flex!important;align-items:center!important;justify-content:center!important;gap:7px!important}
+@media(max-width:900px){
+  body>.builder-banner-header{height:clamp(96px,20vw,150px)!important;min-height:96px!important}
+  .app{height:auto!important;min-height:calc(100vh - clamp(96px,20vw,150px))!important}
+  .panel.controls,.canvas-panel{height:auto!important;max-height:none!important}
+}
+</style>
 </head>
 <body class="mode-fixed">
+<header class="builder-banner-header" aria-label="Chord Mug Builder">
+  <img src="assets/ui/chord-mug-builder-banner.png" alt="Chord Mug Builder — Design your perfect guitar chord reference mug">
+</header>
 <!-- ===== APPLICATION WORKSPACE ===== -->
 <main class="app">
 <!-- Controls panel -->
@@ -4680,7 +4725,7 @@ function completePanelCleanup(){
   const toolbar=document.createElement("div");toolbar.className="global-toolbar";
   const undoButton=q("undoButton"),redoButton=q("redoButton");[undoButton,redoButton].forEach(button=>button?.classList.add("history-action"));
   [undoButton,redoButton,q("saveProject"),q("clearSelection"),q("resetMode")].forEach(button=>button&&toolbar.appendChild(button));
-  const layoutSection=document.querySelector(".layout-section");if(layoutSection){layoutSection.classList.add("top-layout-control");const launcher=document.createElement("button");launcher.type="button";launcher.className="layout-launcher history-action";launcher.textContent="Diagram Layouts";launcher.setAttribute("aria-expanded","false");layoutSection.insertBefore(launcher,layoutSection.querySelector(".layout-buttons"));launcher.onclick=()=>{layoutSection.classList.toggle("open");launcher.setAttribute("aria-expanded",String(layoutSection.classList.contains("open")))};document.addEventListener("click",event=>{if(layoutSection.contains(event.target))return;layoutSection.classList.remove("open","hover-open");launcher.setAttribute("aria-expanded","false")});toolbar.insertBefore(layoutSection,undoButton)}above.appendChild(toolbar);
+  const layoutSection=document.querySelector(".layout-section");if(layoutSection){layoutSection.classList.add("top-layout-control");const launcher=document.createElement("button");launcher.type="button";launcher.className="layout-launcher history-action";launcher.innerHTML='<svg class="top-control-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4v16M10 4v16M15 4v16M20 4v16M3 7h19M3 12h19M3 17h19"/><circle cx="10" cy="9.5" r="1.5" fill="currentColor" stroke="none"/><circle cx="15" cy="14.5" r="1.5" fill="currentColor" stroke="none"/></svg><span>Diagram Layouts</span>';launcher.setAttribute("aria-expanded","false");layoutSection.insertBefore(launcher,layoutSection.querySelector(".layout-buttons"));launcher.onclick=()=>{layoutSection.classList.toggle("open");launcher.setAttribute("aria-expanded",String(layoutSection.classList.contains("open")))};document.addEventListener("click",event=>{if(layoutSection.contains(event.target))return;layoutSection.classList.remove("open","hover-open");launcher.setAttribute("aria-expanded","false")});toolbar.insertBefore(layoutSection,undoButton)}above.appendChild(toolbar);
   const load=document.querySelector(".load-project-control");
 
   const canvas=document.querySelector(".background-controls-section"),appearance=document.querySelector(".diagram-controls.shared-edit-controls"),art=document.querySelector(".art-library-controls"),preview=document.querySelector(".mug-preview-section");
